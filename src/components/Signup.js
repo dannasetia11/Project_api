@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import { Formik, ErrorMessage } from "formik";
-// import { validationForm } from "../validate";
+import { validationForm } from "./validate";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Axios from "axios";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -39,6 +39,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const API_DATABASE = process.env.REACT_APP_API_DATABASE;
+
 function SignUp(props) {
   const classes = useStyles();
 
@@ -57,16 +59,10 @@ function SignUp(props) {
             email: "",
             password: ""
           }}
-          // validate={validationForm}
+          validate={validationForm}
           onSubmit={(values, { setSubmitting }) => {
-            Axios.post("http://localhost:4000", values).then(response => {
-              if (response.status === 201) {
-                localStorage.setItem(
-                  "user",
-                  JSON.stringify(response.data.data)
-                );
-                props.history.push("/signin");
-              }
+            axios.post(`${API_DATABASE}/user`, values).then(response => {
+              props.history.push("/Signin");
             });
           }}
         >
